@@ -71,12 +71,12 @@ c2 = Conv2D(64,3,activation="relu",padding="same")(c1)
 c3 = Conv2D(64,3,activation="relu",padding="same")(c2)
 f1 = Flatten()(c3)
 print("F1 Shape : "+str(f1.shape))
-d1 = Dense(100,activation="relu")(f1)
-d2 = Dense(50,activation="relu")(d1)
+d1 = Dense(100,activation="relu",activity_regularizer=regularizers.l1(10e-5))(f1)
+d2 = Dense(50,activation="relu",activity_regularizer=regularizers.l1(10e-5))(d1)
 # print("C3 shape" + str(c3.shape))
 # #Decoder
-d3 = Dense(100,activation="relu")(d2)
-d4 = Dense(f1.shape[1],activation="relu")(d3)
+d3 = Dense(100,activation="relu",activity_regularizer=regularizers.l1(10e-5))(d2)
+d4 = Dense(f1.shape[1],activation="relu",activity_regularizer=regularizers.l1(10e-5))(d3)
 R = Reshape((32,64,64))(d4)
 up1 = Conv2DTranspose(64,3,activation="relu",padding="same")(R)
 up2 = Conv2DTranspose(64,3,activation="relu",padding="same")(up1)
@@ -98,5 +98,5 @@ model.compile(optimizer='Adam',loss = tf.keras.losses.MSE,metrics=["mean_squared
 with tf.device('GPU'):
     model.fit(x_train,y_train,epochs=100,batch_size=10)
 
-model.save('model4')
+model.save('model1')
 
